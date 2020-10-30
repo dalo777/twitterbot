@@ -13,20 +13,41 @@ function findTweet() {
         console.log(error, data);
         //No errors
         if (!error) {
+            //gets the text of the tweet as array of words
+            var tweetTextArray = data.statuses[0].text.trim().split(" ");
+            
+            //gets the index of "I'm"
+            var indexIm = 0;
+            for (var i=0; i<tweetTextArray.length; i++){
+                if (tweetTextArray[i].match("I'm")) {
+                    indexIm = i;
+                    break;
+                }
+            }
+            
+            //gets the word for the joke
+            var jokeWord = tweetTextArray[indexIm+1];
+            
             //Gets the ID of selected tweet.
             var tweetId = data.statuses[0].id_str;
-            
-            //Insert post code here
-          
+            //Gets the useranme of the selected tweet.
+            var username = data.statuses[0].user.screen_name;
+            //code for the reply itself
+            var reply = {
+                status: '@' + username + " Hi " + jokeWord + ", I'm dad.",
+                in_reply_to_status_id: '' + tweetId
+            };
+            //Posting the reply
+            T.post('statuses/update', reply, function(err, data, response) {
+      console.log(data);
+    })
             
         }
     })
 }
 
 //Timing
-
-findTweet();
-setInterval(retweetLatest, 1000 * 30 * 30);
+setInterval(findTweet, 1000 * 30 * 30);
 
 
 
