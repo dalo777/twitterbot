@@ -15,7 +15,9 @@ function reTweet() {
         console.log(error, data);
         //No Errors.
         if(!error) {
+            //Grabs ID of desired tweet.
             var retweet = data.statuses[0].id_str;
+            //Tells twitter to retweet the tweet.
         T.post('statuses/retweet/' + retweet, { }, function (error, response) {
             if (response) {
 				console.log('Success!')
